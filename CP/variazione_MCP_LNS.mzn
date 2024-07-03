@@ -49,23 +49,32 @@ constraint forall(k in K, i in V) (
   x[k, i, i] = 0
 );
 
-
-
-% Objective: minimize the total distance traveled
+% Definizione della funzione obiettivo (minimizzazione della distanza totale)
 var int: total_distance = sum(k in K, i in V, j in V) (D[i, j] * x[k, i, j]);
+
+% Soluzione iniziale
 solve minimize total_distance;
 
+% Parametri per LNS
+int: perturbation_size = 3;  % Numero di deliverymen da perturbare
 
-% Output
-output [
-  "Total Distance: ", show(total_distance), "\n",
-  "Assignments:\n"
-  ]++[ 
-  "Deliveryman " ++ show(k) ++ ": " ++ show([ i-1 | i in 2..n+1 where visited[k, i] == 1 ]) ++ "\n" 
-  | k in 1..m 
-  ]++[
-  "Routes:\n"
-  ]++[ 
-  "Deliveryman " ++ show(k) ++ ": " ++ show([ (i-1, j-1) | i in V, j in V where x[k, i, j] == 1 ]) ++ "\n" 
-  | k in 1..m  
-  ];
+% Algoritmo LNS
+repeat {
+    % Perturbazione: reset delle assegnazioni per alcuni deliverymen
+    array[1..perturbation_size] of int: perturbed_deliverymen = [rand(1..m) | i in 1..perturbation_size];
+    array[1..perturbation_size] of var K: new_visited[k];
+    array[1..perturbation_size, V] of var 0..1: new_x[k, i, j];
+
+    % Esempio di perturbazione: resettare le assegnazioni di visited e x per i deliverymen selezionati
+    constraint forall(k in perturbed_deliverymen) (
+        new_visited[k] = [if rand() < 0.5 then 0 else 1 endif | i in V];
+        new_x[k, i, j] = [if rand() < 0.5 then 0 else 1 endif | i, j in V];
+    );
+
+    % Ricostruzione: ricalcola il modello con le nuove variabili perturbate
+    solve minimize total_distance;
+
+    % Se la nuova soluzione è migliore, aggiorna le variabili
+    % (nell'esempio semplificato, questo passaggio potrebbe richiedere una gestione più sofisticata)
+} until (criterio_di_terminazione);
+

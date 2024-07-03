@@ -17,7 +17,8 @@ array[1..m] of var int: load; % Total load for each courier
 var float: total_distance = sum(k in 1..m, i in 1..n+1, j in 1..n+1) (D[i,j] * x[i,j,k]);
 
 % Auxiliary variables to store delivery paths
-array[1..m] of var set of int: delivery_paths;
+array[1..m, 1..n] of var 0..n+1: delivery_paths_i;
+array[1..m, 1..n] of var 0..n+1: delivery_paths_j;
 
 % Constraints
 constraint
@@ -43,21 +44,37 @@ constraint
         sum(i in 2..n+1) (x[i,1,k]) = 1
     );
  
-    
-constraint forall (k in 1..m) (
-    % Initialize the set for delivery_paths[k]
-    delivery_paths[k] = {1} ++ { j |
-        i, j in 2..n+1 where fix(x[i-1, j, k]) = 1
-    } ++ {1} /\
-    % Ensure consecutive pairs (i, j) satisfy the condition
-    forall(idx in 2..card(delivery_paths[k])) (
+
+constraint    
+    % Define delivery_paths as sets of tuples (i, j)
+    forall(k in 1..m, i in 1..n, j in 1..n) (
+        if x[i, j, k] == 1 then
+            delivery_paths_i[k, i] = i /\
+            delivery_paths_j[k, i] = j
+        else
+            true
+        endif
+    );
+
+constraint
+    % Check format of the delivery_paths
+    forall(k in 1..m) (
         let {
-            int: i = delivery_paths[k][idx - 1],
-            int: j = delivery_paths[k][idx]
+            int: path_length = sum(i in 1..n) (delivery_paths_i[k, i] != 0)
         } in
-        (fix(x[i, j, k]) = 1 /\ i != j)
-    )
-);
+        if path_length > 0 then
+            % First element of the first tuple must be 1
+            delivery_paths_i[k, 1] = 1 /\
+            % Last element of the last tuple must be 1
+            delivery_paths_j[k, path_length] = 1 /\
+            % Check sequential correctness
+            forall(i in 1..path_length-1) (
+                delivery_paths_j[k, i] = delivery_paths_i[k, i+1]
+            )
+        else
+            true
+        endif
+    );
   
 
 % Objective: Minimize the total distance
@@ -73,7 +90,6 @@ output [
 ] ++ [
     "Routes:\n"
 ] ++ [
-     "Deliveryman " ++ show(k) ++ ": " ++ show(delivery_paths[k]) ++ "\n"
-
-    | k in 1..m 
+    "Deliveryman " ++ show(k) ++ ": " ++ show([(fix(delivery_paths_i[k, i]), fix(delivery_paths_j[k, i])) | i in 1..n where fix(delivery_paths_i[k, i])!= 0]) ++ "\n"
+    | k in 1..m
 ];
