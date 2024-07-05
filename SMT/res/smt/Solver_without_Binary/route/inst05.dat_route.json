@@ -1,0 +1,16 @@
+{
+    "Solver_without_Binary": {
+        "time": 0.8922591209411621,
+        "optimal": true,
+        "obj": 206,
+        "sol": [
+            [
+                2
+            ],
+            [
+                1,
+                3
+            ]
+        ]
+    }
+}
