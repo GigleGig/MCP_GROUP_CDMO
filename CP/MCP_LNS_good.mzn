@@ -9,87 +9,87 @@ array[1..n+1, 1..n+1] of int: D; % Distance matrix (dist[i,j] includes distance 
 
 % Decision variables
 array[1..n] of var 1..m: item_to_courier; % Assign each item to a courier
-array[1..n+1, 1..n+1, 1..m] of var bool: x; % x[i,j,k] is true if courier k travels from item i to item j
-array[1..m] of var int: load; % Total load for each courier
-
-
-% Total distance variable to minimize
-var float: total_distance = sum(k in 1..m, i in 1..n+1, j in 1..n+1) (D[i,j] * x[i,j,k]);
-
-% Auxiliary variables to store delivery paths
-array[1..m, 1..n] of var 0..n+1: delivery_paths_i;
-array[1..m, 1..n] of var 0..n+1: delivery_paths_j;
+array[1..m, 1..n+1] of var 1..n+1: x; % x[k, i] represents the next node that courier k visits from node i
 
 % Constraints
-constraint
-    % Each item is assigned to exactly one courier and no courier exceeds its load limit
-    forall(k in 1..m) (
-        load[k] = sum(i in 1..n where item_to_courier[i] = k) (sj[i])
-    ) /\
-    forall(k in 1..m) (
-        load[k] <= li[k]
+
+constraint 
+    forall(i in 1..m) (
+        sum(j in 1..n where x[i,j] != j)(sj[j]) <= li[i]    % load capacities are respected
+        /\ x[i,n+1] != n+1    % implied constraint
     );
 
 constraint
-    % Each item must be visited by its assigned courier
-    forall(i in 1..n) (
-        sum(j in 1..n+1 where i+1 != j) (x[i+1,j,item_to_courier[i]]) = 1 /\
-        sum(j in 1..n+1 where i+1 != j) (x[j,i+1,item_to_courier[i]]) = 1
+    forall(j in 1..n) (
+        count(z in x[..,j])(z != j) == 1 % each item is transported by exactly one courier
     );
 
-constraint
-    % Each courier starts and ends at the depot (1 is the depot)
-    forall(k in 1..m) (
-        sum(i in 2..n+1) (x[1,i,k]) = 1 /\
-        sum(i in 2..n+1) (x[i,1,k]) = 1
+% constraints to create T as a set of Hamiltonian sub-cycles (or sub-circuits)
+constraint 
+    forall(i in 1..m) (
+        subcircuit(x[i,..])
     );
+
+/*
+% Each courier must carry items within their load limit
+constraint
+  forall(k in 1..m) (
+    sum(i in 1..n where item_to_courier[i] == k) (sj[i]) <= li[k]
+  );
+
+constraint
+  forall(k in 1..m, i in 1..n, j in 1..n where i != j) (
+    (item_to_courier[i] == item_to_courier[j]) -> (x[k, i+1] == j+1)
+  );
  
+% Deliverymen must start and end at the warehouse
+constraint forall(k in 1..m) (
+  sum(j in 2..n+1) (x[k, 1] == j) == 1 /\
+  sum(i in 2..n+1) (x[k, i] == 1) == 1
+);
 
-constraint    
-    % Define delivery_paths as sets of tuples (i, j)
-    forall(k in 1..m, i in 1..n, j in 1..n) (
-        if x[i, j, k] == 1 then
-            delivery_paths_i[k, i] = i /\
-            delivery_paths_j[k, i] = j
-        else
-            true
-        endif
-    );
 
+
+% Ensure that each item is assigned to exactly one courier and is part of a valid tour
 constraint
-    % Check format of the delivery_paths
-    forall(k in 1..m) (
-        let {
-            int: path_length = sum(i in 1..n) (delivery_paths_i[k, i] != 0)
-        } in
-        if path_length > 0 then
-            % First element of the first tuple must be 1
-            delivery_paths_i[k, 1] = 1 /\
-            % Last element of the last tuple must be 1
-            delivery_paths_j[k, path_length] = 1 /\
-            % Check sequential correctness
-            forall(i in 1..path_length-1) (
-                delivery_paths_j[k, i] = delivery_paths_i[k, i+1]
-            )
-        else
-            true
-        endif
-    );
-  
+  forall(i in 1..n) (
+    let {
+      var int: k = item_to_courier[i];
+    } in
+      exists(j in 1..n+1) (x[k, j] == i+1)
+  );
 
-% Objective: Minimize the total distance
-solve :: int_search(item_to_courier, input_order, indomain_random, complete) minimize total_distance;
+% Ensure that if a courier visits a node, that node is assigned to the same courier
+constraint
+  forall(k in 1..m, i in 1..n, j in 1..n where i != j) (
+    (item_to_courier[i] == k /\ item_to_courier[j] == k) -> x[k, i+1] = j+1
+  );
+
+% Constraints to create T as a set of Hamiltonian sub-cycles (or sub-circuits)
+constraint 
+  forall(k in 1..m) (
+    subcircuit(x[k,..])
+  );
+
+% Upper and lower bound for total_distance
+int: obj_lowerbound = max(i in 1..n)(D[n+1,i] + D[i,n+1]);
+
+array[1..n] of int: max_dists = sort([max(j in 1..n)(D[i,j]) | i in 1..n]);
+int: obj_upperbound = sum(i in m+1..n)(max_dists[i]) + max(j in 1..n)(D[n+1,j]) + max(j in 1..n)(D[j,n+1]);
+
+% Objective: Minimize total distance
+var obj_lowerbound..obj_upperbound: */
+var int: total_distance = sum(k in 1..m)(
+  sum(i in 1..n+1 where x[k,i] != i) (
+    D[i, x[k,i]]
+  )
+);
+
+
+% Search Strategy
+solve minimize total_distance;
 
 % Output the results
-output [
-    "Total Distance: ", show(total_distance), "\n",
-    "Assignments:\n"
-] ++ [ 
-    "Deliveryman " ++ show(k) ++ ": " ++ show([i | i in 1..n where fix(item_to_courier[i]) = k]) ++ "\n" 
-    | k in 1..m 
-] ++ [
-    "Routes:\n"
-] ++ [
-    "Deliveryman " ++ show(k) ++ ": " ++ show([(fix(delivery_paths_i[k, i]), fix(delivery_paths_j[k, i])) | i in 1..n where fix(delivery_paths_i[k, i])!= 0]) ++ "\n"
-    | k in 1..m
-];
+output ["Total Distance: \(total_distance)\n"] ++ 
+       [show(x[i,j]) ++ if j == n+1 then "\n" else " " endif | i in 1..m, j in 1..n+1];
+

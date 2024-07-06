@@ -13,18 +13,17 @@ set of int: K = 1..m; % Set of deliverymen
 array[K, V, V] of var 0..1: x; % x[k, i, j] = 1 if deliveryman k travels from i to j, 0 otherwise
 array[K, V] of var 0..1: visited; % visited[k, i] = 1 if deliveryman k visits vertex i, 0 otherwise
 
-
 % Constraints
 
 % Each item must be visited exactly once
 constraint forall(i in 2..n+1) (
-  sum(k in K) (sum(j in V) (x[k, i, j])) = 1
+  sum(k in K) (sum(j in V where j != i) (x[k, i, j])) = 1
 );
 
 % Ensure flow consistency for each deliveryman
 constraint forall(k in K, i in V) (
-  sum(j in V) (x[k, i, j]) = visited[k, i] /\
-  sum(j in V) (x[k, j, i]) = visited[k, i]
+  sum(j in V where i != j) (x[k, i, j]) = visited[k, i] /\
+  sum(j in V where i != j) (x[k, j, i]) = visited[k, i]
 );
 
 % Deliverymen must start and end at the warehouse
@@ -45,36 +44,44 @@ constraint forall(k in K, i in 2..n+1, j in 2..n+1 where i != j) (
 );
 
 % Prevent staying at the same place
-constraint forall(k in K, i in V) (
-  x[k, i, i] = 0
-);
+%constraint forall(k in K, i in V) (
+%  x[k, i, i] = 0
+%);
 
-% Definizione della funzione obiettivo (minimizzazione della distanza totale)
-var int: total_distance = sum(k in K, i in V, j in V) (D[i, j] * x[k, i, j]);
+% Bounds calculations
+% Lower bound calculation
+int: obj_lowerbound = max(i in 2..n+1)(D[n+1,i] + D[i,n+1]);
 
-% Soluzione iniziale
-solve minimize total_distance;
+% Upper bound calculation
+array[1..n] of int: max_dists = sort([max(j in 2..n+1)(D[i,j]) | i in 2..n+1]);
+int: obj_upperbound = sum(i in m+1..n)(max_dists[i]) + max(j in 2..n+1)(D[n+1,j]) + max(j in 2..n+1)(D[j,n+1]);
 
-% Parametri per LNS
-int: perturbation_size = 3;  % Numero di deliverymen da perturbare
+% Objective
+        
+var obj_lowerbound..obj_upperbound: total_distance = max(k in K)(sum(i in V, j in V where i != j) (D[i, j] * x[k, i, j]));
 
-% Algoritmo LNS
-repeat {
-    % Perturbazione: reset delle assegnazioni per alcuni deliverymen
-    array[1..perturbation_size] of int: perturbed_deliverymen = [rand(1..m) | i in 1..perturbation_size];
-    array[1..perturbation_size] of var K: new_visited[k];
-    array[1..perturbation_size, V] of var 0..1: new_x[k, i, j];
 
-    % Esempio di perturbazione: resettare le assegnazioni di visited e x per i deliverymen selezionati
-    constraint forall(k in perturbed_deliverymen) (
-        new_visited[k] = [if rand() < 0.5 then 0 else 1 endif | i in V];
-        new_x[k, i, j] = [if rand() < 0.5 then 0 else 1 endif | i, j in V];
-    );
+% Search Strategy
 
-    % Ricostruzione: ricalcola il modello con le nuove variabili perturbate
-    solve minimize total_distance;
+solve :: int_search(x, dom_w_deg, indomain_min)
+      :: restart_luby(100)
+      :: relax_and_reconstruct(array1d(x), 85)
+         minimize total_distance;
 
-    % Se la nuova soluzione è migliore, aggiorna le variabili
-    % (nell'esempio semplificato, questo passaggio potrebbe richiedere una gestione più sofisticata)
-} until (criterio_di_terminazione);
+
+% Output
+output [
+  "Total Distance: ", show(total_distance), "\n",
+  "Assignments:\n"
+  ]++[ 
+  "Deliveryman " ++ show(k) ++ ": " ++ show([ i-1 | i in 2..n+1 where visited[k, i] == 1 ]) ++ "\n" 
+  | k in 1..m 
+  ]++[
+  "Routes:\n"
+  ]++[ 
+  "Deliveryman " ++ show(k) ++ ": " ++ show([ (i-1, j-1) | i in V, j in V where x[k, i, j] == 1 ]) ++ "\n" 
+  | k in 1..m  
+  ];
+
+
 

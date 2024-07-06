@@ -1,0 +1,20 @@
+{
+  "gecode": {
+    "time": "Error",
+    "optimal": false,
+    "obj": 0,
+    "sol": []
+  },
+  "gecode_symbreak": {
+    "time": "Error",
+    "optimal": false,
+    "obj": 0,
+    "sol": []
+  },
+  "chuffed": {
+    "time": "Error",
+    "optimal": false,
+    "obj": 0,
+    "sol": []
+  }
+}

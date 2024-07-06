@@ -1,0 +1,20 @@
+{
+  "gecode": {
+    "time": "0.12",
+    "optimal": false,
+    "obj": 40,
+    "sol": "[[1, 4, 6], [7, 3], [2, 5]]"
+  },
+  "gecode_symbreak": {
+    "time": "Error",
+    "optimal": false,
+    "obj": 0,
+    "sol": []
+  },
+  "chuffed": {
+    "time": "0.11",
+    "optimal": false,
+    "obj": 40,
+    "sol": "[[4, 5, 2], [6, 3], [1, 7]]"
+  }
+}
