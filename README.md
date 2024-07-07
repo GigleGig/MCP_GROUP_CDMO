@@ -55,4 +55,5 @@ python solution_check.py Instances_dat/ res/
 Navigate to the code directory and build the Docker image using the provided Dockerfile:
 
 ```sh
-docker build -t mcp_project .
+docker build -t mcp_project_Sasdelli_Fossi_Zhang .
+docker run --rm -v $(pwd)/output:/app/output mcp_project_Sasdelli_Fossi_Zhang
