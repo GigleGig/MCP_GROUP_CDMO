@@ -32,3 +32,4 @@ tornado==6.4.1
 traitlets==5.14.3
 webencodings==0.5.1
 wheel==0.43.0
+amplpy==0.14.0

@@ -19,7 +19,7 @@ array[K] of var 0..sum(D): distance;
 % Constraints
 
 % Each item must be visited exactly once
-constraint forall(i in 2..n+1) (
+constraint forall(i in 1..n) (
   sum(k in K) (sum(j in V where j != i) (x[k, i, j])) = 1
 );
 
@@ -31,20 +31,20 @@ constraint forall(k in K, i in V) (
 
 % Deliverymen must start and end at the warehouse
 constraint forall(k in K) (
-  sum(j in 2..n+1) (x[k, 1, j]) = 1 /\
-  sum(i in 2..n+1) (x[k, i, 1]) = 1
+  sum(j in 1..n) (x[k, n+1, j]) = 1 /\
+  sum(i in 1..n) (x[k, i, n+1]) = 1
 );
 
 % Load constraints for each deliveryman
 constraint forall(k in K) (
-  sum(i in 2..n+1) (visited[k, i] * sj[i-1]) <= li[k]
+  sum(i in 1..n) (visited[k, i] * sj[i]) <= li[k]
 );
 
 % Symmetry breaking constraint
 
 % Subtour elimination constraints
-array[K, 2..n+1] of var 1..n: u;
-constraint forall(k in K, i in 2..n+1, j in 2..n+1 where i != j) (
+array[K, 1..n] of var 1..n: u;
+constraint forall(k in K, i in 1..n, j in 1..n where i != j) (
   u[k, i] - u[k, j] + n * x[k, i, j] <= n - 1
 );
 

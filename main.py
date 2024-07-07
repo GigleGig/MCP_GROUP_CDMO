@@ -33,7 +33,7 @@ def run_smt(input_dir):
     run_notebook(smt_script)
 
 if __name__ == "__main__":
-    #run_cp(CP_dir)
-    #run_smt(SMT_dir)
+    run_cp(CP_dir)
+    run_smt(SMT_dir)
     run_mip(MIP_dir)
 
