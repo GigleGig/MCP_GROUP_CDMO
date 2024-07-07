@@ -1,9 +1,39 @@
 {
     "Optimize_Binary": {
-        "time": 300,
-        "optimal": false,
-        "obj": null,
-        "sol": []
+        "time": 108,
+        "optimal": true,
+        "obj": 167,
+        "sol": [
+            [
+                15,
+                12,
+                13,
+                14,
+                3,
+                8
+            ],
+            [
+                5,
+                9
+            ],
+            [
+                17,
+                16,
+                10,
+                6
+            ],
+            [
+                2
+            ],
+            [
+                1,
+                7
+            ],
+            [
+                4,
+                11
+            ]
+        ]
     },
     "Optimize_SB": {
         "time": 300,
