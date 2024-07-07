@@ -24,27 +24,7 @@ This section contains the models and solutions for the MCP problem using STM tec
 
 This folder holds the solutions found using the CP, SMT and MIP approaches.
 
-### Control Code Provided
-
-This section includes the control code provided by the course instructors to verify the correctness of the solutions.
-
-## Getting Started
-
-To reproduce the results and run the models, please follow the instructions provided below.
-
-### Prerequisites
-
-- [Docker](https://www.docker.com/)
-- [MiniZinc](https://www.minizinc.org/) for CP models
-- [Z3 Solver](https://github.com/Z3Prover/z3) for SAT/SMT models
-
-
-### Run the control code provided
-
-**WE HAVE TO WRITE HERE THE LINE OF CODE**
-
-
-### Run the check code
+## Run the check code
 
 ```bash
 python solution_check.py Instances_dat/ res/
