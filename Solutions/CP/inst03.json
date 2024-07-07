@@ -7,7 +7,7 @@
   },
   "chuffed": {
     "time": "0.10",
-    "optimal": false,
+    "optimal": true,
     "obj": 20,
     "sol": "[[2, 4, 5], [3, 7], [1, 6]]"
   }

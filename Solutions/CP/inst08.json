@@ -1,12 +1,12 @@
 {
   "gecode": {
-    "time": "Error",
+    "time": "300",
     "optimal": false,
-    "obj": 0,
-    "sol": []
+    "obj": 326,
+    "sol": "[[8, 9, 10], [7], [6], [5], [4], [3], [2], [1]]"
   },
   "chuffed": {
-    "time": "350.73",
+    "time": "300",
     "optimal": false,
     "obj": null,
     "sol": "[]"
