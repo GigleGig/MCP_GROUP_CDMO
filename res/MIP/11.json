@@ -1,1 +1,26 @@
-{"highs": {"time": 262, "optimal": "false", "obj": 0, "sol": [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]}, "scip": {"time": 219, "optimal": "false", "obj": 0, "sol": [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]}, "highs_symbreak": {"time": 292, "optimal": "false", "obj": 0, "sol": [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]}, "scip_symbreak": {"time": 297, "optimal": "false", "obj": 0, "sol": [[], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []]}}
+{
+    "highs": {
+        "time": 262, 
+        "optimal": "false", 
+        "obj": 0, 
+        "sol": []
+    }, 
+    "scip": {
+        "time": 219, 
+        "optimal": "false", 
+        "obj": 0, 
+        "sol": []
+    }, 
+    "highs_symbreak": {
+        "time": 292, 
+        "optimal": "false", 
+        "obj": 0, 
+        "sol": []
+    }, 
+    "scip_symbreak": {
+        "time": 297, 
+        "optimal": "false", 
+        "obj": 0, 
+        "sol": []
+    }
+}
