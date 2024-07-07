@@ -44,6 +44,12 @@ To reproduce the results and run the models, please follow the instructions prov
 **WE HAVE TO WRITE HERE THE LINE OF CODE**
 
 
+### Run the check code
+
+```bash
+python solution_check.py Instances_dat/ res/
+```
+
 ### Building the Docker Image
 
 Navigate to the code directory and build the Docker image using the provided Dockerfile:

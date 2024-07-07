@@ -1,0 +1,14 @@
+{
+  "gecode": {
+    "time": 0.75,
+    "optimal": false,
+    "obj": 14,
+    "sol": [[4, 3, 1], [2, 5, 6]]
+  },
+  "chuffed": {
+    "time": 0.10,
+    "optimal": true,
+    "obj": 14,
+    "sol": [[4, 3, 1], [2, 5, 6]]
+  }
+}

@@ -51,16 +51,14 @@ constraint forall(k in couriers, i in 2..n+1, j in 2..n+1 where i != j) (
 int: obj_lowerbound = sum(i in items)(D[1,i+1] + D[i+1,1]) div m;
 int: obj_upperbound = max(i in items)(D[1,i+1] + D[i+1,1]) + sum(i in 2..n+1)(D[i-1,i]);
 
-var obj_lowerbound..obj_upperbound: total_distance = max(k in couriers)(
+var obj_lowerbound..obj_upperbound: max_route_length = max(k in couriers)(
     sum(i in nodes, j in nodes) (x[k, i, j] * D[i, j])
 );
 
 % Solving
-solve minimize total_distance;
+solve minimize max_route_length;
 
 % Output
-output ["Distance: " ++ show(total_distance) ++ "\n"] ++
+output ["Distance: " ++ show(max_route_length) ++ "\n"] ++
        ["Deliveryman " ++ show(k) ++ ": " ++ show([i-1 | i in 2..n+1 where visited[k, i] = 1]) ++ "\n" | k in couriers];
-
-
 

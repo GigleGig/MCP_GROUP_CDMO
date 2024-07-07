@@ -5,8 +5,8 @@ import re
 
 # Percorsi delle cartelle e dei file
 instances_folder = './CP/Instances'
-modelfiles = ['./CP/MCP_final.mzn']
-solutions_folder = './Solutions/CP/'
+modelfiles = ['./CP/MCP_no_bounds.mzn']
+solutions_folder = './res/CP/MCP_no_bounds/'
 
 # Crea la cartella delle soluzioni se non esiste
 if not os.path.exists(solutions_folder):
@@ -56,7 +56,7 @@ for instance in instances:
                 list_routes = str([lst for _, lst in assignments])
                 # Costruisci l'oggetto JSON per il solver corrente
                 results[solver] = {
-                    "time": tempo,  
+                    "time": int(tempo),  
                     "optimal": False,  
                     "obj": total_distance,  
                     "sol": list_routes
@@ -65,7 +65,7 @@ for instance in instances:
             except subprocess.CalledProcessError as e:
                 print(f'Error solving {instance} with {solver}: {e.stderr}')
                 results[solver] = {
-                    "time": "Error",
+                    "time": 0.0,
                     "optimal": False,
                     "obj": 0,
                     "sol": []
