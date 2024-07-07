@@ -46,4 +46,3 @@ Navigate to the code directory and build the Docker image using the provided Doc
 
 ```sh
 docker build -t mcp_project_Sasdelli_Fossi_Zhang .
-docker run --rm -v $(pwd)/output:/app/output mcp_project_Sasdelli_Fossi_Zhang

@@ -1,15 +1,16 @@
-# Use a base image with Python
-FROM python:3.12
+# Use a Python image as base
+FROM python:3.12.4
 
-# Set the working directory
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy the requirements.txt file and install dependencies
+# Copy the entire project's contents into the /app directory of the container
 COPY . .
-RUN pip install -r requirements.txt
 
-# Install Jupyter and nbconvert
-RUN pip install jupyter nbconvert
+# Install dependencies specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Set the command to run the main script
-CMD python3 main.py
+RUN pip install jupyter
+
+# Commands to run main.py
+CMD ["python", "main.py"]
