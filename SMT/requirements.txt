@@ -1,0 +1,6 @@
+os ===> 3.11.5
+json ===> 2.0.9
+numpy ===> 1.24.3
+z3-solver ===> 4.13.0.0
+more-itertools ===> 10.1.0
+matplotlib ===> 3.8.0
