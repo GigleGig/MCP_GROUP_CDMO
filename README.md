@@ -8,9 +8,13 @@ The project repository is organized as follows:
 
 ### CP (Constraint Programming)
 
-- **final_code**: This folder contains the final version of the CP code that models and solves the MCP problem.
-- **variations**: This directory includes different variations and attempts of the CP models explored during the development phase.
-- **instances**: This directory contains the instances of the MCP problem used for testing and validation.
+- **MCP_final**: This code is the final version of the CP code that models and solves the MCP problem.
+- **MCP_no_boundaries**: This code is a variation without the boundaries and with another variable.
+- **Instances**: This directory contains the instances of the MCP problem used for testing and validation.
+- **run_mcp**: This python code is used to execute the .mzn codes
+    ```bash
+    python run_mcp.py
+    ```
 
 ### MIP (Mixed-Integer Linear Programming)
 
@@ -20,7 +24,7 @@ This section contains the models and solutions for the MCP problem using MIP tec
 
 This section contains the models and solutions for the MCP problem using STM techniques.
 
-### Solutions
+### res folder
 
 This folder holds the solutions found using the CP, SMT and MIP approaches.
 
