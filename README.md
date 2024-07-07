@@ -16,13 +16,17 @@ The project repository is organized as follows:
     python run_mcp.py
     ```
 
+### SMT (Satisfiability modulo theories)
+
+- **Optimize_BINARY**: This code is the final version of SMT model that used Optimize and Binary Search method.
+- **OPTIMIZE_WITH_SB**: This code is the final version of SMT model that used Optimize and Binary Search method but plus symmetry breaking constraint.
+- **Integrating Json**: This code is for the purpose of integrating two different methods' output into one json file for each instance.
+- **Test**: This code is working for revising code, after code works well, it will be seperated into different code files.
+
+
 ### MIP (Mixed-Integer Linear Programming)
 
 This section contains the models and solutions for the MCP problem using MIP techniques.
-
-### STM (Satisfiability Modulo Theories)
-
-This section contains the models and solutions for the MCP problem using STM techniques.
 
 ### res folder
 
