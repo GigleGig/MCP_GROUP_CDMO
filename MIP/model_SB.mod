@@ -20,6 +20,7 @@ var succ{objects} >= 1, <= n integer; # sequence with the order of the visited l
 
 var courier_distance{couriers} >= 0 integer; # distance of each courier
 var max_distance >= lower_bound, <= upper_bound integer;
+var num_objects{couriers} >= 0 integer;
 
 minimize obj_max_distance:
     max_distance; # we want to minimize the max distance
@@ -51,3 +52,13 @@ subject to first_location{i in couriers, k in objects}:
 subject to succ_location{i in couriers, j in objects, k in objects}:
         succ[j]-succ[k] >= 1 - 2*n * (1-X[i,k,j]); # successive location
           
+subject to compute_num_objects{i in couriers}:
+    num_objects[i] = sum{j in objects, k in distances} X[i, j, k];
+
+param M := upper_bound;
+
+subject to symmetry_breaking{i in 1..m-1}:
+    courier_distance[i] <= courier_distance[i+1] + M * (num_objects[i+1] - num_objects[i]);
+
+
+
