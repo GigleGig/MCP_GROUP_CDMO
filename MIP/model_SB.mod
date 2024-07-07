@@ -25,40 +25,40 @@ var num_objects{couriers} >= 0 integer;
 minimize obj_max_distance:
     max_distance; # we want to minimize the max distance
 
-subject to max_courier_distance{i in couriers}:
-    max_distance >= courier_distance[i]; # define the max distance as the max among the couriers distances
-subject to one_courier_per_item_start{j in objects}:
-    sum{i in couriers, k in distances} X[i,j,k]=1; # one courier per item
-subject to one_courier_per_item_end{k in objects}:
-    sum{i in couriers, j in distances} X[i,j,k]=1; # one courier per item
-subject to one_visit{i in couriers, j in objects}:
-    X[i, j, j] = 0;
-subject to implied_constraint {i in couriers}: # at least one object per courier
-    X[i,n+1,n+1]=0;
-subject to continuative{i in couriers, j in objects}:
-    sum{k in distances} X[i, k, j] = sum{k in distances} X[i, j, k];
-subject to start_origin{i in couriers}:
-    sum{k in objects} X[i, n+1, k]=1; # path must start at origin
-subject to end_origin{i in couriers}:
-    sum{j in objects} X[i, j, n+1]=1; # path must end at origin
+subject to max_courier_distance{k in couriers}:
+    max_distance >= courier_distance[k]; # define the max distance as the max among the couriers distances
+subject to one_courier_per_item_start{i in objects}:
+    sum{k in couriers, j in distances} X[k,i,j]=1; # one courier per item
+subject to one_courier_per_item_end{j in objects}:
+    sum{k in couriers, i in distances} X[k,i,j]=1; # one courier per item
+subject to one_visit{k in couriers, i in objects}:
+    X[k, i, i] = 0;
+subject to one_object {k in couriers}: # at least one object per courier
+    X[k,n+1,n+1]=0;
+subject to continuative{k in couriers, i in objects}:
+    sum{j in distances} X[k, j, i] = sum{j in distances} X[k, i, j];
+subject to start_origin{k in couriers}:
+    sum{j in objects} X[k, n+1, j]=1; # path must start at origin
+subject to end_origin{k in couriers}:
+    sum{i in objects} X[k, i, n+1]=1; # path must end at origin
 
-subject to load_not_exceed_capacity{i in couriers}:
-    sum{j in objects, k in distances} X[i,j,k] * s_values[j] <= l_values[i]; # the objects load must not exceed the capacity
-subject to compute_distance{i in couriers}:
-    courier_distance[i] = sum{j in distances, k in distances} distance_matrix[j, k] * X[i, j, k]; # to compute the distance of each courier
+subject to load_not_exceed_capacity{k in couriers}:
+    sum{i in objects, j in distances} X[k,i,j] * s_values[i] <= l_values[k]; # the objects load must not exceed the capacity
+subject to compute_distance{k in couriers}:
+    courier_distance[k] = sum{i in distances, j in distances} distance_matrix[i, j] * X[k, i, j]; # to compute the distance of each courier
 
-subject to first_location{i in couriers, k in objects}:
-        succ[k] <= 1 + 2*n * (1-X[i,n+1,k]); # first location
-subject to succ_location{i in couriers, j in objects, k in objects}:
-        succ[j]-succ[k] >= 1 - 2*n * (1-X[i,k,j]); # successive location
+subject to first_location{k in couriers, j in objects}:
+        succ[j] <= 1 + 2*n * (1-X[k,n+1,j]); # first location
+subject to succ_location{k in couriers, i in objects, j in objects}:
+        succ[i]-succ[j] >= 1 - 2*n * (1-X[k,j,i]); # successive location
           
-subject to compute_num_objects{i in couriers}:
-    num_objects[i] = sum{j in objects, k in distances} X[i, j, k];
+subject to compute_num_objects{k in couriers}:
+    num_objects[k] = sum{i in objects, j in distances} X[k, i, j];
 
 param M := upper_bound;
 
-subject to symmetry_breaking{i in 1..m-1}:
-    courier_distance[i] <= courier_distance[i+1] + M * (num_objects[i+1] - num_objects[i]);
+subject to symmetry_breaking{k in 1..m-1}:
+    courier_distance[k] <= courier_distance[k+1] + M * (num_objects[k+1] - num_objects[k]);
 
 
 
