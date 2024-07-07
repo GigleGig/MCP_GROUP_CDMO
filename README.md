@@ -8,20 +8,20 @@ The project repository is organized as follows:
 
 ### CP (Constraint Programming)
 
-- **MCP_final**: This code is the final version of the CP code that models and solves the MCP problem.
-- **MCP_no_boundaries**: This code is a variation without the boundaries and with another variable.
+- **MCP_final.mzn**: This code is the final version of the CP code that models and solves the MCP problem.
+- **MCP_no_boundaries.mzn**: This code is a variation without the boundaries and with another variable.
 - **Instances**: This directory contains the instances of the MCP problem used for testing and validation.
-- **run_mcp**: This python code is used to execute the .mzn codes
+- **run_mcp.py**: This python code is used to execute the .mzn codes
     ```bash
     python run_mcp.py
     ```
 
 ### SMT (Satisfiability modulo theories)
 
-- **Optimize_BINARY**: This code is the final version of SMT model that used Optimize and Binary Search method.
-- **OPTIMIZE_WITH_SB**: This code is the final version of SMT model that used Optimize and Binary Search method but plus symmetry breaking constraint.
-- **Integrating Json**: This code is for the purpose of integrating two different methods' output into one json file for each instance.
-- **Test**: This code is working for revising code, after code works well, it will be seperated into different code files.
+- **Optimize_BINARY.ipynb**: This code is the final version of SMT model that used Optimize and Binary Search method.
+- **OPTIMIZE_WITH_SB.ipynb**: This code is the final version of SMT model that used Optimize and Binary Search method but plus symmetry breaking constraint.
+- **Integrating Json,ipynb**: This code is for the purpose of integrating two different methods' output into one json file for each instance.
+- **Test.ipynb**: This code is working for revising code, after code works well, it will be seperated into different code files.
 
 
 ### MIP (Mixed-Integer Linear Programming)
