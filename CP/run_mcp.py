@@ -6,7 +6,7 @@ import re
 # Percorsi delle cartelle e dei file
 instances_folder = './CP/Instances'
 modelfiles = ['./CP/MCP_final.mzn']
-solutions_folder = './CP/Solutions'
+solutions_folder = './Solutions/CP/'
 
 # Crea la cartella delle soluzioni se non esiste
 if not os.path.exists(solutions_folder):

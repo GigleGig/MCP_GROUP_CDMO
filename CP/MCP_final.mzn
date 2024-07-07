@@ -1,5 +1,4 @@
 include "globals.mzn";
-include "lex_lesseq.mzn";
 
 % Input data
 int: m;  % Number of couriers
@@ -39,6 +38,8 @@ constraint forall(k in couriers) (
 constraint forall(k in couriers) (
   sum(i in 2..n+1) (visited[k, i] * sj[i-1]) <= li[k]
 );
+
+% Symmetry breaking constraint
 
 % Subtour elimination constraints
 array[couriers, 2..n+1] of var 1..n: u;
