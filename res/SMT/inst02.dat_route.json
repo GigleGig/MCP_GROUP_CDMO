@@ -1,6 +1,6 @@
 {
     "Optimize_Binary": {
-        "time": 0.772334098815918,
+        "time": 0,
         "optimal": true,
         "obj": 226,
         "sol": [
@@ -28,7 +28,7 @@
         ]
     },
     "Optimize_SB": {
-        "time": 173.45782136917114,
+        "time": 173,
         "optimal": true,
         "obj": 226,
         "sol": [
