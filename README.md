@@ -26,7 +26,9 @@ The project repository is organized as follows:
 
 ### MIP (Mixed-Integer Linear Programming)
 
-This section contains the models and solutions for the MCP problem using MIP techniques.
+- **model.mod**: This file contains the MIP model written in the AMPL language without the symmetry breaking contraint
+- **model_SB.mod**: This file contains the MIP model written in the AMPL language with the symmetry breaking contraint.
+- **MIP.ipynb**: Jupyter notebook to run both the MIP models.
 
 ### res folder
 
