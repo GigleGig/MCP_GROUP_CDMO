@@ -56,7 +56,7 @@ for instance in instances:
                 list_routes = str([lst for _, lst in assignments])
                 # Costruisci l'oggetto JSON per il solver corrente
                 results[solver] = {
-                    "time": int(tempo),  
+                    "time": tempo,  
                     "optimal": False,  
                     "obj": total_distance,  
                     "sol": list_routes

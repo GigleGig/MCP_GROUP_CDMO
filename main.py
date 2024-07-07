@@ -29,7 +29,7 @@ def run_mip(input_dir):
 
 def run_smt(input_dir):
     print("Running SMT script...")
-    smt_script = os.path.join(input_dir, "Optimize_SB.ipynb")
+    smt_script = os.path.join(input_dir, "OPTIMIZE_WITH_SB.ipynb")
     run_notebook(smt_script)
 
 if __name__ == "__main__":
