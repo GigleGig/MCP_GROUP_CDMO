@@ -1,0 +1,14 @@
+{
+    "Optimize_Binary": {
+        "time": 300,
+        "optimal": false,
+        "obj": null,
+        "sol": []
+    },
+    "Optimize_SB": {
+        "time": 300,
+        "optimal": false,
+        "obj": null,
+        "sol": []
+    }
+}
