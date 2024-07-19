@@ -55,8 +55,12 @@ var lower_bound..obj_upperbound: max_route_length = max(k in couriers)(
     sum(i in nodes, j in nodes) (x[k, i, j] * D[i, j])
 );
 
-% Solving
-solve minimize max_route_length;
+% Search Strategy
+solve :: int_search([x[k, i, j] | k in couriers, i in nodes, j in nodes], dom_w_deg, indomain_min) 
+      :: restart_luby(100)
+      :: relax_and_reconstruct(array1d(x), 85)
+      minimize max_route_length;
+
 
 % Output
 output ["Distance: " ++ show(max_route_length) ++ "\n"] ++
